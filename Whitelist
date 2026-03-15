@@ -1,1 +1,4 @@
-
+return {
+    ["kkaconsal"] = true,
+    ["Amigo1"] = true
+}
