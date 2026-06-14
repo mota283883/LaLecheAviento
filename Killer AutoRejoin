@@ -117,7 +117,7 @@ end
 
 task.spawn(function()
     while true do
-        task.wait(90)
+        task.wait(45)
         pcall(serverHop)
     end
 end)
