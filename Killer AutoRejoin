@@ -9,10 +9,7 @@ local LocalPlayer = Players.LocalPlayer
 local PlaceId = game.PlaceId
 local JobId = game.JobId
 
-if not whitelist[LocalPlayer.Name] then
-    LocalPlayer:Kick("No autorizado")
-    return
-end
+
 
 Lighting.ClockTime = 0
 Lighting.Brightness = 1
