@@ -38,12 +38,12 @@ return {
     ["DEMON_X2V"] = true,
     ["Johanx7_12"] = true,
     ["Ghost198520"] = true, -- Acc Cris
-    ["BDRL_1"] = true,
-    ["soysakura_7"] = true,
-    ["hoyyaTH3"] = true,
-    ["Mawi2025"] = true,
+    ["BDRL_1"] = true, -- Acc de BD
+    ["soysakura_7"] = true, -- Acc De Sebas
+    ["hoyyaTH3"] = true, -- Acc de xMos
+    ["Mawi2025"] = true, -- Acc De Sherha
     ["thelegends23k"] = true,
-    [""] = true,
+    ["alison_xzt"] = true, -- Acc De Sherya
     [""] = true,
     [""] = true,
     [""] = true,
