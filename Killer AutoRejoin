@@ -1,0 +1,143 @@
+-- skidder gay
+
+local Players = game:GetService("Players")
+local TeleportService = game:GetService("TeleportService")
+local HttpService = game:GetService("HttpService")
+local RunService = game:GetService("RunService")
+
+local LocalPlayer = Players.LocalPlayer
+local placeId = game.PlaceId
+
+getgenv().AutoKillAll = true
+getgenv().Whitelist = {}
+
+local function equipPunch(char)
+    char = char or LocalPlayer.Character
+    if not char then return end
+
+    for _, tool in ipairs(LocalPlayer.Backpack:GetChildren()) do
+        if tool.Name:lower():find("punch") then
+            tool.Parent = char
+
+            if tool:FindFirstChild("attackTime") then
+                tool.attackTime.Value = 0
+            end
+        end
+    end
+end
+
+local function onCharacterAdded(char)
+    task.wait(0.5)
+    equipPunch(char)
+
+    local hum = char:WaitForChild("Humanoid", 5)
+    if hum then
+        hum.Died:Connect(function()
+            task.wait(1)
+            pcall(function()
+                serverHop()
+            end)
+        end)
+    end
+end
+
+LocalPlayer.CharacterAdded:Connect(onCharacterAdded)
+
+if LocalPlayer.Character then
+    onCharacterAdded(LocalPlayer.Character)
+end
+
+RunService.Heartbeat:Connect(function()
+    if not getgenv().AutoKillAll then return end
+
+    local char = LocalPlayer.Character
+    if not char then return end
+
+    if not char:FindFirstChildOfClass("Tool") then
+        equipPunch(char)
+    end
+
+    local tool = char:FindFirstChildOfClass("Tool")
+    if tool then
+        pcall(function()
+            tool:Activate()
+        end)
+
+        if tool:FindFirstChild("attackTime") then
+            tool.attackTime.Value = 0
+        end
+    end
+end)
+
+local function updateFriendsWhitelist()
+    for _, plr in ipairs(Players:GetPlayers()) do
+        if plr ~= LocalPlayer then
+            pcall(function()
+                if plr:IsFriendsWith(LocalPlayer.UserId) then
+                    if not table.find(getgenv().Whitelist, plr.Name) then
+                        table.insert(getgenv().Whitelist, plr.Name)
+                    end
+                end
+            end)
+        end
+    end
+end
+
+local function attack(target)
+    local char = LocalPlayer.Character
+    if not char then return end
+
+    local hand = char:FindFirstChild("RightHand") or char:FindFirstChild("Right Arm")
+    if not hand then return end
+
+    local hrp = target.Character and target.Character:FindFirstChild("HumanoidRootPart")
+    if not hrp then return end
+
+    for i = 1, 2 do
+        firetouchinterest(hand, hrp, 0)
+        firetouchinterest(hand, hrp, 1)
+    end
+end
+
+function serverHop()
+    local servers = {}
+    local req = game:HttpGet("https://games.roblox.com/v1/games/"..placeId.."/servers/Public?sortOrder=Asc&limit=100")
+    local data = HttpService:JSONDecode(req)
+
+    for _, v in pairs(data.data) do
+        if v.playing < v.maxPlayers then
+            table.insert(servers, v.id)
+        end
+    end
+
+    if #servers > 0 then
+        TeleportService:TeleportToPlaceInstance(placeId, servers[math.random(1, #servers)], LocalPlayer)
+    end
+end
+
+task.spawn(function()
+    while true do
+        task.wait(90)
+        pcall(serverHop)
+    end
+end)
+
+task.spawn(function()
+    while true do
+        if getgenv().AutoKillAll then
+            updateFriendsWhitelist()
+
+            for _, plr in ipairs(Players:GetPlayers()) do
+                if plr ~= LocalPlayer and not table.find(getgenv().Whitelist, plr.Name) then
+                    local hum = plr.Character and plr.Character:FindFirstChildOfClass("Humanoid")
+
+                    if hum and hum.Health > 0 then
+                        pcall(attack, plr)
+                    end
+                end
+            end
+        end
+
+        task.wait(0.02)
+    end
+end)
