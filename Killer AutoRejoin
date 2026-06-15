@@ -272,10 +272,10 @@ RunService.Heartbeat:Connect(function()
                 local root = target.Character:FindFirstChild("HumanoidRootPart")
                 if root and root:IsDescendantOf(Workspace) then
                     spawn(function()
-                        for i = 1, 10 do
+                        for i = 1, 2 do
                             firetouchinterest(hand, root, 0)
                             firetouchinterest(hand, root, 1)
-                            task.wait(0.005)
+                            task.wait(0.01)
                         end
                     end)
                 end
