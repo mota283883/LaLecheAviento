@@ -1,52 +1,26 @@
 return {
+-- Acc Mias
     ["elpepe2929290"] = true,
     ["jmg6600"] = true,
     ["kkaconsal"] = true,
+    ["GTO_CRXS"] = true,
+-- Acc De Raul
     ["XxEzeck13xX"] = true,
     ["XxEzeck153xX"] = true,
     ["chrisR333"] = true,
     ["SC_Leoking"] = true,
-    ["supercloud_sabe2110"] = true, 
+    ["Raulreyes2007"] = true,
+-- Acc De Cris
+    ["isaias_malagon"] = true, 
     ["Gato_pro239"] = true,
     ["Ghost198520"] = true,
     ["pro9pup"] = true,
     ["TheReal9818"] = true,
+-- Acc De Monarca
     ["MONARCA_986"] = true,
-    ["GTO_CRXS"] = true,
-    ["OG_XxKINGxX555"] = true,
-    ["isaias_malagon"] = true,
-    ["Aura_MG"] = true,
-    ["Raulreyes2007"] = true,
     ["Atenea_gosh"] = true,
-    [""] = true,
-    [""] = true,
-    [""] = true,
-    [""] = true,
-    [""] = true,
-    [""] = true,
-    [""] = true,
-    [""] = true,
-    [""] = true,
-    [""] = true,
-    [""] = true,
-    [""] = true,
-    [""] = true,
-    [""] = true,
-    [""] = true,
-    [""] = true,
-    [""] = true,
-    [""] = true,
-    [""] = true,
-    [""] = true, -- Acc Cris
-    [""] = true, -- Acc de BD
-    [""] = true, -- Acc De Sebas
-    [""] = true, -- Acc de xMos
-    [""] = true, -- Acc De Sherha
-    [""] = true,
-    [""] = true, -- Acc De Sherya
-    [""] = true,
-    [""] = true,
-    [""] = true,
-    [""] = true,
-    [""] = true
+    ["OG_XxKINGxX555"] = true,
+    ["Aura_MG"] = true,
+-- Acc De Johan
+    ["supercloud_sabe2110"] = true
 }
