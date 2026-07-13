@@ -11,11 +11,12 @@ return {
     ["SC_Leoking"] = true,
     ["Raulreyes2007"] = true,
 -- Acc De Cris
-    [""] = true, 
-    [""] = true,
-    [""] = true,
     ["pro9pup"] = true,
     ["TheReal9818"] = true,
 -- Acc De Johan
-    ["supercloud_sabe2110"] = true
+    ["supercloud_sabe2110"] = true,
+-- Acc De Johan JX7
+    ["Johanx7_12"] = true,
+-- Acc De Juan 
+    ["Jeferso123098"] = true
 }
