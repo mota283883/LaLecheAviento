@@ -3,9 +3,9 @@ local ui_options = {
 	min_size = Vector2.new(400, 300),
 	toggle_key = Enum.KeyCode.RightShift,
 	can_resize = true,
-	logo = "", -- e.g. "rbxassetid://123456789" — replaces the open/close toggle button icon
+	logo = "rbxassetid://96901006704209", -- replaces the open/close toggle button icon
 	window_title = "New Window", -- default title used when AddWindow is called without one
-	background = "", -- e.g. "rbxassetid://123456789" — background image behind the whole window
+	background = "rbxassetid://96901006704209", -- background image behind the whole window
 	background_transparency = 0, -- 0 = fully visible, 1 = invisible
 	background_dim = 0.6, -- 0 = no dark overlay, 1 = fully black (keeps text readable over busy images)
 }
