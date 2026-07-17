@@ -1,34 +1,4 @@
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
 
-local whitelist = {
-   "hoyyaTH3",
-   "PRGMCHAN",
-   ""
-}
-
-local function isWhitelisted(name)
-   for _, v in ipairs(whitelist) do
-       if v == name then return true end
-   end
-   return false
-end
-
-if isWhitelisted(player.Name) then
-   _G.S = _G.S or {}
-   _G.S.infiniteRebirthActive = true
-
-   local RS = game:GetService("ReplicatedStorage")
-
-   spawn(function()
-       while _G.S.infiniteRebirthActive do
-           wait(0.1)
-           pcall(function()
-               RS.rEvents.rebirthRemote:InvokeServer("rebirthRequest")
-           end)
-       end
-   end)
-else
 local ui_options = {
 	main_color = Color3.fromRGB(41, 74, 122),
 	min_size = Vector2.new(400, 300),
@@ -2049,4 +2019,3 @@ function library:AddWindow(title, options)
 end
 
 return library
-end
