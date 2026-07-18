@@ -3,11 +3,6 @@ local ui_options = {
 	min_size = Vector2.new(400, 300),
 	toggle_key = Enum.KeyCode.RightShift,
 	can_resize = true,
-	logo = "rbxassetid://96901006704209", -- this replaces the toggle button icon completely
-	window_title = "New Window",
-	background = "rbxassetid://96901006704209",
-	background_transparency = 0,
-	background_dim = 0.6,
 }
 
 do
@@ -22,8 +17,6 @@ local Window = Instance.new("ImageLabel")
 local Resizer = Instance.new("Frame")
 local Bar = Instance.new("Frame")
 local Toggle = Instance.new("ImageButton")
-local Background = Instance.new("ImageLabel")
-local BackgroundOverlay = Instance.new("Frame")
 local Base = Instance.new("ImageLabel")
 local Top = Instance.new("ImageLabel")
 local Tabs = Instance.new("Frame")
@@ -149,26 +142,7 @@ Toggle.Position = UDim2.new(0, 5, 0, -2)
 Toggle.Rotation = 90
 Toggle.Size = UDim2.new(0, 20, 0, 20)
 Toggle.ZIndex = 2
-Toggle.Image = "rbxassetid://96901006704209" 
-
-Background.Name = "Background"
-Background.Parent = Window
-Background.BackgroundTransparency = 1
-Background.Size = UDim2.new(1, 0, 1, 0)
-Background.ScaleType = Enum.ScaleType.Crop
-Background.Image = ""
-Background.ImageTransparency = 0
-Background.ZIndex = 0
-
-BackgroundOverlay.Name = "BackgroundOverlay"
-BackgroundOverlay.Parent = Window
-BackgroundOverlay.BorderSizePixel = 0
-BackgroundOverlay.BackgroundColor3 = Color3.new(0, 0, 0)
-BackgroundOverlay.BackgroundTransparency = 1
-BackgroundOverlay.Size = UDim2.new(1, 0, 1, 0)
-BackgroundOverlay.ZIndex = 0
-
-Base.Name = "Base"
+Toggle.Image = "rbxassetid://96901006704209" -- cambia este ID por el tuyo
 Base.Parent = Bar
 Base.BackgroundColor3 = Color3.new(0.160784, 0.290196, 0.478431)
 Base.BorderSizePixel = 0
@@ -970,13 +944,8 @@ end
 function library:AddWindow(title, options)
 	windows = windows + 1
 	local dropdown_open = false
-	options = (typeof(options) == "table") and options or {}
-	for k, v in next, ui_options do -- fill in anything not explicitly overridden
-		if options[k] == nil then
-			options[k] = v
-		end
-	end
-	title = tostring(title or options.window_title or "New Window")
+	title = tostring(title or "New Window")
+	options = (typeof(options) == "table") and options or ui_options
 	options.tween_time = 0.1
 
 	local Window = Prefabs:FindFirstChild("Window"):Clone()
@@ -1011,32 +980,6 @@ function library:AddWindow(title, options)
 
 	local window_data = {}
 	Window.Draggable = true
-
-	do -- [Logo as Toggle] Replace toggle button with your logo, configured from ui_options
-		local Bar = Window:FindFirstChild("Bar")
-		local ToggleImage = Bar:FindFirstChild("Toggle")
-		if ToggleImage and options.logo and tostring(options.logo) ~= "" then
-			ToggleImage.Image = tostring(options.logo)
-		end
-	end
-
-	do -- [Background] Image + dark overlay behind window content, configured from ui_options
-		local BackgroundImage = Window:FindFirstChild("Background")
-		local BackgroundOverlay = Window:FindFirstChild("BackgroundOverlay")
-
-		if BackgroundImage then
-			BackgroundImage.ZIndex = BackgroundImage.ZIndex + (windows * 10)
-			local bgId = options.background and tostring(options.background) or ""
-			BackgroundImage.Image = bgId
-			BackgroundImage.ImageTransparency = tonumber(options.background_transparency) or 0
-		end
-
-		if BackgroundOverlay then
-			BackgroundOverlay.ZIndex = BackgroundOverlay.ZIndex + (windows * 10)
-			local dim = tonumber(options.background_dim)
-			BackgroundOverlay.BackgroundTransparency = 1 - (dim or 0.6)
-		end
-	end
 
 	do -- Resize Window
 		local oldIcon = mouse.Icon
