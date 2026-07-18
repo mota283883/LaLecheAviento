@@ -108,12 +108,12 @@ Window.Name = "Window"
 Window.Parent = Prefabs
 Window.Active = true
 Window.BackgroundColor3 = Color3.new(1, 1, 1)
-Window.BackgroundTransparency = 0.5
+Window.BackgroundTransparency = 1
 Window.ClipsDescendants = true
 Window.Position = UDim2.new(0, 20, 0, 20)
 Window.Selectable = true
 Window.Size = UDim2.new(0, 200, 0, 200)
-Window.Image = "rbxassetid://96901006704209"
+Window.Image = "rbxassetid://2851926732"
 Window.ImageColor3 = Color3.new(0.0823529, 0.0862745, 0.0901961)
 Window.ScaleType = Enum.ScaleType.Slice
 Window.SliceCenter = Rect.new(12, 12, 12, 12)
@@ -142,7 +142,7 @@ Toggle.Position = UDim2.new(0, 5, 0, -2)
 Toggle.Rotation = 90
 Toggle.Size = UDim2.new(0, 20, 0, 20)
 Toggle.ZIndex = 2
-Toggle.Image = "https://www.roblox.com/Thumbs/Asset.ashx?width=420&height=420&assetId=4731371541"
+Toggle.Image = "rbxassetid://TU_LOGO_ID" -- Reemplaza TU_LOGO_ID con el ID de tu asset
 
 Base.Name = "Base"
 Base.Parent = Bar
@@ -621,7 +621,8 @@ Lines.BorderSizePixel = 0
 Lines.Size = UDim2.new(0, 40, 0, 10000)
 Lines.ZIndex = 4
 Lines.Font = Enum.Font.Code
-Lines.Text = "1\n"
+Lines.Text = "1
+"
 Lines.TextColor3 = Color3.new(1, 1, 1)
 Lines.TextSize = 15
 Lines.TextWrapped = true
@@ -1062,7 +1063,7 @@ function library:AddWindow(title, options)
 					Resizer.Active = false
 
 					oldy = Window.AbsoluteSize.Y
-					Resize(open_close, {Rotation = 0}, options.tween_time)
+					Resize(open_close, {Rotation = 90}, options.tween_time) -- Mantiene en 90 grados al cerrar
 					Resize(Window, {Size = UDim2.new(0, Window.AbsoluteSize.X, 0, 26)}, options.tween_time)
 					open_close.Parent:FindFirstChild("Base").Transparency = 1
 
@@ -1075,7 +1076,7 @@ function library:AddWindow(title, options)
 
 					Resizer.Active = true
 
-					Resize(open_close, {Rotation = 90}, options.tween_time)
+					Resize(open_close, {Rotation = 90}, options.tween_time) -- Mantiene en 90 grados al abrir
 					Resize(Window, {Size = UDim2.new(0, Window.AbsoluteSize.X, 0, oldy)}, options.tween_time)
 					open_close.Parent:FindFirstChild("Base").Transparency = 0
 
@@ -1684,7 +1685,7 @@ function library:AddWindow(title, options)
 								end
 								S = S:gsub(".", function(c)
 									if Token[c] ~= nil then
-										return "\32"
+										return ""
 									else
 										return c
 									end
@@ -1725,12 +1726,14 @@ function library:AddWindow(title, options)
 								string:gsub(".", function(c)
 									if Token[c] ~= nil then
 										A = A .. c
-									elseif c == "\n" then
-										A = A .. "\n"
-									elseif c == "\t" then
-										A = A .. "\t"
+									elseif c == "
+" then
+										A = A .. "
+"
+									elseif c == "	" then
+										A = A .. "	"
 									else
-										A = A .. "\32"
+										A = A .. ""
 									end
 								end)
 
@@ -1741,21 +1744,23 @@ function library:AddWindow(title, options)
 								local highlight = ""
 								local quote = false
 								string:gsub(".", function(c)
-									if quote == false and c == "\34" then
+									if quote == false and c == "" then
 										quote = true
-									elseif quote == true and c == "\34" then
+									elseif quote == true and c == "" then
 										quote = false
 									end
-									if quote == false and c == "\34" then
-										highlight = highlight .. "\34"
-									elseif c == "\n" then
-										highlight = highlight .. "\n"
-									elseif c == "\t" then
-										highlight = highlight .. "\t"
+									if quote == false and c == "" then
+										highlight = highlight .. ""
+									elseif c == "
+" then
+										highlight = highlight .. "
+"
+									elseif c == "	" then
+										highlight = highlight .. "	"
 									elseif quote == true then
 										highlight = highlight .. c
 									elseif quote == false then
-										highlight = highlight .. "\32"
+										highlight = highlight .. ""
 									end
 								end)
 
@@ -1773,14 +1778,16 @@ function library:AddWindow(title, options)
 									end
 									if quote == false and c == "\]" then
 										highlight = highlight .. "\]"
-									elseif c == "\n" then
-										highlight = highlight .. "\n"
-									elseif c == "\t" then
-										highlight = highlight .. "\t"
+									elseif c == "
+" then
+										highlight = highlight .. "
+"
+									elseif c == "	" then
+										highlight = highlight .. "	"
 									elseif quote == true then
 										highlight = highlight .. c
 									elseif quote == false then
-										highlight = highlight .. "\32"
+										highlight = highlight .. ""
 									end
 								end)
 
@@ -1789,7 +1796,8 @@ function library:AddWindow(title, options)
 
 							local comments = function(string)
 								local ret = ""
-								string:gsub("[^\r\n]+", function(c)
+								string:gsub("[^
+]+", function(c)
 									local comm = false
 									local i = 0
 									c:gsub(".", function(n)
@@ -1800,7 +1808,7 @@ function library:AddWindow(title, options)
 										if comm == true then
 											ret = ret .. n
 										else
-											ret = ret .. "\32"
+											ret = ret .. ""
 										end
 									end)
 									ret = ret
@@ -1814,12 +1822,14 @@ function library:AddWindow(title, options)
 								string:gsub(".", function(c)
 									if tonumber(c) ~= nil then
 										A = A .. c
-									elseif c == "\n" then
-										A = A .. "\n"
-									elseif c == "\t" then
-										A = A .. "\t"
+									elseif c == "
+" then
+										A = A .. "
+"
+									elseif c == "	" then
+										A = A .. "	"
 									else
-										A = A .. "\32"
+										A = A .. ""
 									end
 								end)
 
@@ -1828,8 +1838,8 @@ function library:AddWindow(title, options)
 
 							local highlight_lua = function(type)
 								if type == "Text" then
-									Source.Text = Source.Text:gsub("\13", "")
-									Source.Text = Source.Text:gsub("\t", "      ")
+									Source.Text = Source.Text:gsub("", "")
+									Source.Text = Source.Text:gsub("	", "      ")
 									local s = Source.Text
 
 									Source.Keywords.Text = Highlight(s, lua_keywords)
@@ -1841,13 +1851,15 @@ function library:AddWindow(title, options)
 									Source.Comments.Text = comments(s)
 
 									local lin = 1
-									s:gsub("\n", function()
+									s:gsub("
+", function()
 										lin = lin + 1
 									end)
 
 									Lines.Text = ""
 									for i = 1, lin do
-										Lines.Text = Lines.Text .. i .. "\n"
+										Lines.Text = Lines.Text .. i .. "
+"
 									end
 
 									sf.CanvasSize = UDim2.new(0, 0, lin * 0.153846154, 0)
@@ -1856,19 +1868,30 @@ function library:AddWindow(title, options)
 								local highlight_logs = function(type)
 								end
 								if type == "Text" then
-									Source.Text = Source.Text:gsub("\13", "")
-									Source.Text = Source.Text:gsub("\t", "      ")
+									Source.Text = Source.Text:gsub("", "")
+									Source.Text = Source.Text:gsub("	", "      ")
 									local s = Source.Text
 
 									Source.Info.Text = info(s)
 
 									local lin = 1
-									s:gsub("\n", function()
+									s:gsub("
+", function()
 										lin = lin + 1
 									end)
 
 									sf.CanvasSize = UDim2.new(0, 0, lin * 0.153846154, 0)
 								end
+							end
+
+							if console_options.source == "Lua" then
+								highlight_lua("Text")
+								Source.Changed:Connect(highlight_lua)
+							elseif console_options.source == "Logs" then
+								Lines.Visible = false
+
+								highlight_logs("Text")
+								Source.Changed:Connect(highlight_logs)
 							end
 
 							if console_options.source == "Lua" then
@@ -1890,7 +1913,8 @@ function library:AddWindow(title, options)
 							end
 
 							function console_data:Log(msg)
-								Source.Text = Source.Text .. "[*] " .. tostring(msg) .. "\n"
+								Source.Text = Source.Text .. "[*] " .. tostring(msg) .. "
+"
 							end
 
 						end
