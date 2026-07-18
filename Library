@@ -3,6 +3,11 @@ local ui_options = {
 	min_size = Vector2.new(400, 300),
 	toggle_key = Enum.KeyCode.RightShift,
 	can_resize = true,
+	logo = "rbxassetid://96901006704209", -- this replaces the toggle button icon completely
+	window_title = "New Window",
+	background = "rbxassetid://96901006704209",
+	background_transparency = 0,
+	background_dim = 0.6,
 }
 
 do
@@ -17,6 +22,8 @@ local Window = Instance.new("ImageLabel")
 local Resizer = Instance.new("Frame")
 local Bar = Instance.new("Frame")
 local Toggle = Instance.new("ImageButton")
+local Background = Instance.new("ImageLabel")
+local BackgroundOverlay = Instance.new("Frame")
 local Base = Instance.new("ImageLabel")
 local Top = Instance.new("ImageLabel")
 local Tabs = Instance.new("Frame")
@@ -142,7 +149,24 @@ Toggle.Position = UDim2.new(0, 5, 0, -2)
 Toggle.Rotation = 90
 Toggle.Size = UDim2.new(0, 20, 0, 20)
 Toggle.ZIndex = 2
-Toggle.Image = "https://www.roblox.com/Thumbs/Asset.ashx?width=420&height=420&assetId=4731371541"
+Toggle.Image = "rbxassetid://96901006704209" 
+
+Background.Name = "Background"
+Background.Parent = Window
+Background.BackgroundTransparency = 1
+Background.Size = UDim2.new(1, 0, 1, 0)
+Background.ScaleType = Enum.ScaleType.Crop
+Background.Image = ""
+Background.ImageTransparency = 0
+Background.ZIndex = 0
+
+BackgroundOverlay.Name = "BackgroundOverlay"
+BackgroundOverlay.Parent = Window
+BackgroundOverlay.BorderSizePixel = 0
+BackgroundOverlay.BackgroundColor3 = Color3.new(0, 0, 0)
+BackgroundOverlay.BackgroundTransparency = 1
+BackgroundOverlay.Size = UDim2.new(1, 0, 1, 0)
+BackgroundOverlay.ZIndex = 0
 
 Base.Name = "Base"
 Base.Parent = Bar
@@ -621,7 +645,8 @@ Lines.BorderSizePixel = 0
 Lines.Size = UDim2.new(0, 40, 0, 10000)
 Lines.ZIndex = 4
 Lines.Font = Enum.Font.Code
-Lines.Text = "1\n"
+Lines.Text = "1
+"
 Lines.TextColor3 = Color3.new(1, 1, 1)
 Lines.TextSize = 15
 Lines.TextWrapped = true
@@ -945,8 +970,13 @@ end
 function library:AddWindow(title, options)
 	windows = windows + 1
 	local dropdown_open = false
-	title = tostring(title or "New Window")
-	options = (typeof(options) == "table") and options or ui_options
+	options = (typeof(options) == "table") and options or {}
+	for k, v in next, ui_options do -- fill in anything not explicitly overridden
+		if options[k] == nil then
+			options[k] = v
+		end
+	end
+	title = tostring(title or options.window_title or "New Window")
 	options.tween_time = 0.1
 
 	local Window = Prefabs:FindFirstChild("Window"):Clone()
@@ -981,6 +1011,32 @@ function library:AddWindow(title, options)
 
 	local window_data = {}
 	Window.Draggable = true
+
+	do -- [Logo as Toggle] Replace toggle button with your logo, configured from ui_options
+		local Bar = Window:FindFirstChild("Bar")
+		local ToggleImage = Bar:FindFirstChild("Toggle")
+		if ToggleImage and options.logo and tostring(options.logo) ~= "" then
+			ToggleImage.Image = tostring(options.logo)
+		end
+	end
+
+	do -- [Background] Image + dark overlay behind window content, configured from ui_options
+		local BackgroundImage = Window:FindFirstChild("Background")
+		local BackgroundOverlay = Window:FindFirstChild("BackgroundOverlay")
+
+		if BackgroundImage then
+			BackgroundImage.ZIndex = BackgroundImage.ZIndex + (windows * 10)
+			local bgId = options.background and tostring(options.background) or ""
+			BackgroundImage.Image = bgId
+			BackgroundImage.ImageTransparency = tonumber(options.background_transparency) or 0
+		end
+
+		if BackgroundOverlay then
+			BackgroundOverlay.ZIndex = BackgroundOverlay.ZIndex + (windows * 10)
+			local dim = tonumber(options.background_dim)
+			BackgroundOverlay.BackgroundTransparency = 1 - (dim or 0.6)
+		end
+	end
 
 	do -- Resize Window
 		local oldIcon = mouse.Icon
@@ -1062,7 +1118,7 @@ function library:AddWindow(title, options)
 					Resizer.Active = false
 
 					oldy = Window.AbsoluteSize.Y
-					Resize(open_close, {Rotation = 0}, options.tween_time)
+					Resize(open_close, {Rotation = 90}, options.tween_time) -- Mantiene en 90 grados al cerrar
 					Resize(Window, {Size = UDim2.new(0, Window.AbsoluteSize.X, 0, 26)}, options.tween_time)
 					open_close.Parent:FindFirstChild("Base").Transparency = 1
 
@@ -1075,7 +1131,7 @@ function library:AddWindow(title, options)
 
 					Resizer.Active = true
 
-					Resize(open_close, {Rotation = 90}, options.tween_time)
+					Resize(open_close, {Rotation = 90}, options.tween_time) -- Mantiene en 90 grados al abrir
 					Resize(Window, {Size = UDim2.new(0, Window.AbsoluteSize.X, 0, oldy)}, options.tween_time)
 					open_close.Parent:FindFirstChild("Base").Transparency = 0
 
@@ -1684,7 +1740,7 @@ function library:AddWindow(title, options)
 								end
 								S = S:gsub(".", function(c)
 									if Token[c] ~= nil then
-										return "\32"
+										return ""
 									else
 										return c
 									end
@@ -1725,12 +1781,14 @@ function library:AddWindow(title, options)
 								string:gsub(".", function(c)
 									if Token[c] ~= nil then
 										A = A .. c
-									elseif c == "\n" then
-										A = A .. "\n"
-									elseif c == "\t" then
-										A = A .. "\t"
+									elseif c == "
+" then
+										A = A .. "
+"
+									elseif c == "	" then
+										A = A .. "	"
 									else
-										A = A .. "\32"
+										A = A .. ""
 									end
 								end)
 
@@ -1741,21 +1799,23 @@ function library:AddWindow(title, options)
 								local highlight = ""
 								local quote = false
 								string:gsub(".", function(c)
-									if quote == false and c == "\34" then
+									if quote == false and c == "" then
 										quote = true
-									elseif quote == true and c == "\34" then
+									elseif quote == true and c == "" then
 										quote = false
 									end
-									if quote == false and c == "\34" then
-										highlight = highlight .. "\34"
-									elseif c == "\n" then
-										highlight = highlight .. "\n"
-									elseif c == "\t" then
-										highlight = highlight .. "\t"
+									if quote == false and c == "" then
+										highlight = highlight .. ""
+									elseif c == "
+" then
+										highlight = highlight .. "
+"
+									elseif c == "	" then
+										highlight = highlight .. "	"
 									elseif quote == true then
 										highlight = highlight .. c
 									elseif quote == false then
-										highlight = highlight .. "\32"
+										highlight = highlight .. ""
 									end
 								end)
 
@@ -1773,14 +1833,16 @@ function library:AddWindow(title, options)
 									end
 									if quote == false and c == "\]" then
 										highlight = highlight .. "\]"
-									elseif c == "\n" then
-										highlight = highlight .. "\n"
-									elseif c == "\t" then
-										highlight = highlight .. "\t"
+									elseif c == "
+" then
+										highlight = highlight .. "
+"
+									elseif c == "	" then
+										highlight = highlight .. "	"
 									elseif quote == true then
 										highlight = highlight .. c
 									elseif quote == false then
-										highlight = highlight .. "\32"
+										highlight = highlight .. ""
 									end
 								end)
 
@@ -1789,7 +1851,8 @@ function library:AddWindow(title, options)
 
 							local comments = function(string)
 								local ret = ""
-								string:gsub("[^\r\n]+", function(c)
+								string:gsub("[^
+]+", function(c)
 									local comm = false
 									local i = 0
 									c:gsub(".", function(n)
@@ -1800,7 +1863,7 @@ function library:AddWindow(title, options)
 										if comm == true then
 											ret = ret .. n
 										else
-											ret = ret .. "\32"
+											ret = ret .. ""
 										end
 									end)
 									ret = ret
@@ -1814,12 +1877,14 @@ function library:AddWindow(title, options)
 								string:gsub(".", function(c)
 									if tonumber(c) ~= nil then
 										A = A .. c
-									elseif c == "\n" then
-										A = A .. "\n"
-									elseif c == "\t" then
-										A = A .. "\t"
+									elseif c == "
+" then
+										A = A .. "
+"
+									elseif c == "	" then
+										A = A .. "	"
 									else
-										A = A .. "\32"
+										A = A .. ""
 									end
 								end)
 
@@ -1828,8 +1893,8 @@ function library:AddWindow(title, options)
 
 							local highlight_lua = function(type)
 								if type == "Text" then
-									Source.Text = Source.Text:gsub("\13", "")
-									Source.Text = Source.Text:gsub("\t", "      ")
+									Source.Text = Source.Text:gsub("", "")
+									Source.Text = Source.Text:gsub("	", "      ")
 									local s = Source.Text
 
 									Source.Keywords.Text = Highlight(s, lua_keywords)
@@ -1841,13 +1906,15 @@ function library:AddWindow(title, options)
 									Source.Comments.Text = comments(s)
 
 									local lin = 1
-									s:gsub("\n", function()
+									s:gsub("
+", function()
 										lin = lin + 1
 									end)
 
 									Lines.Text = ""
 									for i = 1, lin do
-										Lines.Text = Lines.Text .. i .. "\n"
+										Lines.Text = Lines.Text .. i .. "
+"
 									end
 
 									sf.CanvasSize = UDim2.new(0, 0, lin * 0.153846154, 0)
@@ -1856,19 +1923,30 @@ function library:AddWindow(title, options)
 								local highlight_logs = function(type)
 								end
 								if type == "Text" then
-									Source.Text = Source.Text:gsub("\13", "")
-									Source.Text = Source.Text:gsub("\t", "      ")
+									Source.Text = Source.Text:gsub("", "")
+									Source.Text = Source.Text:gsub("	", "      ")
 									local s = Source.Text
 
 									Source.Info.Text = info(s)
 
 									local lin = 1
-									s:gsub("\n", function()
+									s:gsub("
+", function()
 										lin = lin + 1
 									end)
 
 									sf.CanvasSize = UDim2.new(0, 0, lin * 0.153846154, 0)
 								end
+							end
+
+							if console_options.source == "Lua" then
+								highlight_lua("Text")
+								Source.Changed:Connect(highlight_lua)
+							elseif console_options.source == "Logs" then
+								Lines.Visible = false
+
+								highlight_logs("Text")
+								Source.Changed:Connect(highlight_logs)
 							end
 
 							if console_options.source == "Lua" then
@@ -1890,7 +1968,8 @@ function library:AddWindow(title, options)
 							end
 
 							function console_data:Log(msg)
-								Source.Text = Source.Text .. "[*] " .. tostring(msg) .. "\n"
+								Source.Text = Source.Text .. "[*] " .. tostring(msg) .. "
+"
 							end
 
 						end
