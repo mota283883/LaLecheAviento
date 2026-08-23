@@ -4,5 +4,7 @@ return {
     ["jmg6600"] = true,
     ["kkaconsal"] = true,
 -- Acc De Brayan
-    ["Brxyxn_pv"] = true
+    ["Brxyxn_pv"] = true,
+-- Acc De Cris
+    ["Gato_pro239"] = true
 }
