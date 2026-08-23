@@ -8,5 +8,11 @@ return {
 -- Acc De Cris
     ["Gato_pro239"] = true,
 -- Acc De Sherya
-    ["CRXS9818"] = true
+    ["CRXS9818"] = true,
+-- Acc De Mi Esposa
+    ["Mex_ej"] = true,
+    [""] = true,
+    [""] = true,
+    [""] = true,
+    [""] = true
 }
