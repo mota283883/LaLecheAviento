@@ -10,11 +10,11 @@ return {
     ["Specter_Cris"] = true,
 -- Acc De Sherya
     ["CRXS9818"] = true,
+    ["JohanAxelRS"] = true,
 -- Acc De Fany
     ["Mex_ej"] = true,
 -- Acc De Ernesto
     ["erneoroytxd"] = true,
-    [""] = true,
     [""] = true,
     [""] = true
 }
